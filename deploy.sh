@@ -7,7 +7,7 @@ then
 elif [ "$BRANCH_NAME" = "staging" ]
 then
     stagevar=staging
-elif [[ $BRANCH_NAME == iftihor-* ]]
+elif [ $BRANCH_NAME == main ]
 then
     stagevar=dev
 fi
