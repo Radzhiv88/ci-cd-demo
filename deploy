@@ -1,0 +1,41 @@
+#!/bin/bash
+
+branch=$BRANCH_NAME # this one
+echo "Branch - $branch"
+
+if [ "$branch" = "production/deploy" ]
+then
+  stage=prod
+elif [ "$branch" = "master" ]
+then
+  stage=staging
+elif [[ $branch == feature-* ]]
+then
+  stage=dev
+fi
+
+# use variables from stage files
+source stages/$stage
+
+export AWS_DEFAULT_REGION=us-east-1
+
+echo $stage
+
+if [ "$stage" = "prod"]
+then
+  cd web
+  make deploy version=$webversion namespace=$namespace # this one
+
+  cd ../api
+  make deploy version=$apiversion namespace=$namespace
+else
+  cd web
+  make build version=$webversion
+  make push version=$webversion
+  make deploy version=$webversion namespace=$namespace # this one
+
+  cd ../api
+  make build version=$apiversion
+  make push version=$apiversion
+  make deploy version=$apiversion namespace=$namespace
+fi

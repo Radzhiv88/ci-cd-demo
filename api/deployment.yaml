@@ -1,0 +1,44 @@
+--- # Connect to API 
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: marsel-demo-api
+  name: backend-api-svc
+  namespace: webapi-dev
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: marsel-demo-api
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: marsel-demo-api
+  namespace: NAMESPACE
+  labels:
+    app: marsel-demo-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: marsel-demo-api
+  template:
+    metadata:
+      labels:
+        app: marsel-demo-api
+    spec:
+      containers:
+      - name: marsel-demo-api
+        image: ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/apiapp:IMAGEVERSION
+        envFrom:
+        - secretRef:
+            name: api-db-secret
+        env:
+          - name: PORT
+            value: "80"
+        ports:
+        - containerPort: 80
