@@ -15,3 +15,4 @@ deploy:
 	@echo "namespace variable is set to $(namespace)"
 	@cat deployment.yaml | sed "s|IMAGEVERSION|$(version)|g;s|NAMESPACE|$(namespace)|g;s|ACCOUNT|$(account)|g" | kubectl apply -f -
 #salam
+#Sanjar krasavchikkkkkkkk
